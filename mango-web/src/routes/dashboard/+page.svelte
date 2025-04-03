@@ -4,7 +4,7 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 
 	let loading: boolean = true;
-	let serverHealth: number = 1;
+	let serverHealth: number = 0;
 
 	onMount(async () => {
 		loading = true;
@@ -49,11 +49,17 @@
 					</Card.Header>
 					<Card.Content>
 						{#if serverHealth === 0}
-							<div class="flex w-full justify-center"><p class="hover:motion-preset-confetti text-5xl">✅</p></div>
+							<div class="flex w-full justify-center">
+								<p class="hover:motion-preset-confetti text-5xl">✅</p>
+							</div>
 						{:else if serverHealth === 1}
-							<div class="flex w-full justify-center"><p class="hover:motion-preset-seesaw text-5xl">⚠️</p></div>
+							<div class="flex w-full justify-center">
+								<p class="hover:motion-preset-seesaw text-5xl">⚠️</p>
+							</div>
 						{:else}
-							<div class="flex w-full justify-center"><p class="hover:motion-preset-wobble text-5xl">⛔</p></div>
+							<div class="flex w-full justify-center">
+								<p class="hover:motion-preset-wobble text-5xl">⛔</p>
+							</div>
 						{/if}
 					</Card.Content>
 				</Card.Root>
