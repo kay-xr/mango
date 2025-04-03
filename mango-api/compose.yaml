@@ -1,0 +1,6 @@
+﻿services:
+  mango.api:
+    image: mango.api
+    build:
+      context: .
+      dockerfile: Mango.API/Dockerfile
