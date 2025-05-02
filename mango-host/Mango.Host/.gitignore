@@ -1,0 +1,7 @@
+bin
+obj
+mango-config.json
+*.env
+.env
+!.env.example
+certs

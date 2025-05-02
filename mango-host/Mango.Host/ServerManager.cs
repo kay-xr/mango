@@ -1,22 +1,20 @@
 using System.Diagnostics;
+using Mango.Host.Models;
 
-namespace Mango.Server;
+namespace Mango.Host;
 
 public class ServerManager
 {
+    private MangoConfig _mangoConfig;
     private Process? _process;
-
-    // TODO: Make these configurable as needed.
-    private const string ExecutablePath = "./test/Mango.TestApplication";
-    private const string DefaultArguments = "";
-
     public bool IsRunning => _process != null && !_process.HasExited;
-
     public event Action<string>? OutputDataReceived;
 
-    /// <summary>
-    ///     Start the server if it's not running
-    /// </summary>
+    public ServerManager(MangoConfig mangoConfig)
+    {
+        _mangoConfig = mangoConfig;
+    }
+    
     public async Task StartServerAsync()
     {
         if (IsRunning)
@@ -24,11 +22,12 @@ public class ServerManager
             Console.WriteLine("Server is already running!");
             return;
         }
-
+        
         var psi = new ProcessStartInfo
         {
-            FileName = ExecutablePath,
-            Arguments = DefaultArguments,
+            FileName = _mangoConfig.ServerExecutable,
+            Arguments = _mangoConfig.ServerArguments,
+            WorkingDirectory = _mangoConfig.ServerDirectory,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             UseShellExecute = false,
@@ -53,8 +52,10 @@ public class ServerManager
                 {
                     var line = _process.StandardOutput.ReadLine();
                     if (line is not null)
-                        // Console.WriteLine($"[Server Output] {line}");
+                    {
+                        Console.WriteLine($"[Server Output] {line}");
                         OutputDataReceived?.Invoke($"[Server Output] {line}");
+                    }
                 }
             });
 
@@ -72,10 +73,7 @@ public class ServerManager
             });
         }
     }
-
-    /// <summary>
-    ///     Stop the server if running
-    /// </summary>
+    
     public async Task StopServerAsync()
     {
         if (!IsRunning)
@@ -98,13 +96,11 @@ public class ServerManager
             OutputDataReceived?.Invoke($"Failed to stop server process: {ex.Message}");
         }
     }
-
-    /// <summary>
-    ///     Restart server by stopping, waiting 10s and restarting
-    /// </summary>
+    
     public async Task RestartServerAsync()
     {
         await StopServerAsync();
+        Console.WriteLine("Server process exited, waiting 10s...");
         await Task.Delay(10000);
         await StartServerAsync();
     }
