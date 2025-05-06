@@ -7,6 +7,12 @@ export const user = pgTable('user', {
 	passwordHash: text('password_hash').notNull()
 });
 
+export const invite = pgTable('invites', {
+	id: text('id').primaryKey(),
+	code: text('code').notNull(),
+	expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull()
+})
+
 export const session = pgTable('session', {
 	id: text('id').primaryKey(),
 	userId: text('user_id')
@@ -21,8 +27,12 @@ export const host = pgTable('host', {
 	port: integer('port').notNull(),
 	hostname: text('hostname').notNull(),
 	lastSeen: timestamp('last_seen', { withTimezone: true, mode: 'date' }),
-})
+});
 
 export type Session = typeof session.$inferSelect;
 
 export type User = typeof user.$inferSelect;
+
+export type Invite = typeof invite.$inferSelect;
+
+export type Host = typeof host.$inferSelect;

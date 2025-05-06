@@ -1,2 +1,3 @@
 postgres-data
 *.DS_STORE
+postgres.sh

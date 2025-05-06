@@ -4,7 +4,7 @@
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import AppSidebar from '$lib/components/app-sidebar.svelte';
 
-	const hiddenSidebarRoutes = ['/', '/login', '/error'];
+	const hiddenSidebarRoutes = ['/', '/login', '/error', '/register'];
 
 	import { ModeWatcher } from 'mode-watcher';
 	import { page } from '$app/stores';
